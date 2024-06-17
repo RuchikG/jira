@@ -15,7 +15,6 @@ import java.util.Map;
 @Slf4j
 public class ApiController {
 
-
     @PostMapping(value = "/v1/data", consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> addPickupPointService(@RequestBody Object requestData) throws JsonProcessingException {
