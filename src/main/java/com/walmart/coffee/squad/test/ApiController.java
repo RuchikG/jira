@@ -23,7 +23,6 @@ public class ApiController {
     @PostMapping(value = "/v1/data", consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> getGitHubWebhooks(@RequestBody ESEntityDTO requestData) throws JsonProcessingException {
-        System.out.println(requestData.toString());
         esIndexDao.publishDataToES(requestData, generateESIndexName());
         return ResponseEntity.ok(requestData);
     }
