@@ -32,7 +32,7 @@ public class PullRequest {
     @JsonProperty("merged_at")
     private String mergedAt;
     @JsonProperty("requested_reviewers")
-    private List<String> reviewers;
+    private List<Reviewer> reviewers;
     private List<Label> labels;
     private Boolean draft;
 }
