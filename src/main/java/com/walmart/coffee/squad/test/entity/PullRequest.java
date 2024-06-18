@@ -1,4 +1,4 @@
-package com.walmart.coffee.squad.test.dto;
+package com.walmart.coffee.squad.test.entity;
 
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;

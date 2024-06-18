@@ -1,10 +1,11 @@
-package com.walmart.coffee.squad.test.dto;
+package com.walmart.coffee.squad.test.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -14,6 +15,10 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class Reviewer {
-    private String login;
+public class ESEntityDTO {
+
+    private String action;
+    private Review review;
+    @JsonProperty("pull_request")
+    private PullRequest pullRequest;
 }

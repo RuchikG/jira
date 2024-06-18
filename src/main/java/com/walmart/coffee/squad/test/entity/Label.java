@@ -1,4 +1,4 @@
-package com.walmart.coffee.squad.test.dto;
+package com.walmart.coffee.squad.test.entity;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -14,6 +14,6 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class User {
-    private String login;
+public class Label {
+    private String name;
 }
