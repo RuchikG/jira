@@ -16,11 +16,13 @@ import org.apache.http.impl.client.HttpClients;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.http.client.methods.HttpPost;
+import org.springframework.stereotype.Service;
 
 import java.util.Base64;
 
 import static com.walmart.coffee.squad.test.constants.Constants.*;
 
+@Service
 public class JiraServiceImpl implements JiraService {
 
     private Logger log = LoggerFactory.getLogger(getClass());
@@ -38,7 +40,8 @@ public class JiraServiceImpl implements JiraService {
         jiraPayload.setTransition(jiraTransitionDTO);
 
         HttpPost postRequest = new HttpPost(url);
-        postRequest.addHeader("accept", "application/json");
+        postRequest.addHeader("accept", "*/*");
+        postRequest.addHeader("content-type", "application/json");
         postRequest.addHeader(AUTHORIZATION, jiraAuth);
         StringEntity stringEntity;
         try {
