@@ -96,7 +96,7 @@ public class ElasticSearchConfiguration {
     private CredentialsProvider getCredentialsProvider() {
         final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
         credentialsProvider.setCredentials(AuthScope.ANY,
-                new UsernamePasswordCredentials("SVC-DL-ES-READWRITE", "uK6H5G9XnT3mQLp"));
+                new UsernamePasswordCredentials("dfdfdfsfs", "sfsfsdfsf"));
         return credentialsProvider;
     }
 
