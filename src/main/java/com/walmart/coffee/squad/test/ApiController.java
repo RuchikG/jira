@@ -18,7 +18,7 @@ public class ApiController {
 
     @PostMapping(value = "/v1/data", consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> addPickupPointService(@RequestBody Object requestData) throws JsonProcessingException {
+    public ResponseEntity<Object> addDatatoElasticSearch(@RequestBody Object requestData) throws JsonProcessingException {
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         String json = ow.writeValueAsString(requestData);
         System.out.println(json);
