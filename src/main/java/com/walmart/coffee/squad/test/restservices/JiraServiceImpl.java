@@ -40,8 +40,8 @@ public class JiraServiceImpl implements JiraService {
         jiraPayload.setTransition(jiraTransitionDTO);
 
         HttpPost postRequest = new HttpPost(url);
-        postRequest.addHeader("accept", "*/*");
-        postRequest.addHeader("content-type", "application/json");
+        postRequest.addHeader(ACCEPT, ACCEPT_HEADER);
+        postRequest.addHeader(CONTENT_TYPE, CONTENT_TYPE_HEADER);
         postRequest.addHeader(AUTHORIZATION, jiraAuth);
         StringEntity stringEntity;
         try {
