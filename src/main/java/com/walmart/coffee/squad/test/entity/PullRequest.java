@@ -1,4 +1,4 @@
-package com.walmart.coffee.squad.test.dto;
+package com.walmart.coffee.squad.test.entity;
 
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -32,7 +32,7 @@ public class PullRequest {
     @JsonProperty("merged_at")
     private String mergedAt;
     @JsonProperty("requested_reviewers")
-    private List<String> reviewers;
+    private List<Reviewer> reviewers;
     private List<Label> labels;
     private Boolean draft;
 }

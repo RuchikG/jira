@@ -2,15 +2,12 @@ package com.walmart.coffee.squad.test;
 
 import java.time.ZonedDateTime;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.walmart.coffee.squad.test.dto.ESEntityDTO;
+import com.walmart.coffee.squad.test.entity.ESEntityDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-
 
 @RestController
 @Slf4j
