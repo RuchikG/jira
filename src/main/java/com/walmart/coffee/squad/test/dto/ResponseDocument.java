@@ -1,4 +1,4 @@
-package com.walmart.coffee.squad.test.model;
+package com.walmart.coffee.squad.test.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
@@ -17,5 +17,5 @@ public class ResponseDocument implements Serializable {
 
     String type;
     Long numDocuments;
-    List<ElasticSearchDocument> data;
+    List<ESEntityDTO> data;
 }

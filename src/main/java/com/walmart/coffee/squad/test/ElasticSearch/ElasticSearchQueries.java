@@ -1,8 +1,11 @@
 package com.walmart.coffee.squad.test.ElasticSearch;
 
-import com.walmart.coffee.squad.test.Common.JsonUtil;
-import com.walmart.coffee.squad.test.model.ElasticSearchDocument;
-import com.walmart.coffee.squad.test.model.ResponseDocument;
+import com.walmart.coffee.squad.test.JsonUtil;
+import com.walmart.coffee.squad.test.config.ElasticSearchConfiguration;
+import com.walmart.coffee.squad.test.constants.Constants;
+import com.walmart.coffee.squad.test.dto.ESEntityDTO;
+import com.walmart.coffee.squad.test.dto.ResponseDocument;
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
@@ -12,74 +15,61 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.Aggregations;
+import org.elasticsearch.search.aggregations.BucketOrder;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Component
 @Slf4j
 public class ElasticSearchQueries {
 
-    private static final String INDEX_NAME = "index";
+    @Autowired
+    ElasticSearchRequest elasticSearchRequest;
 
-    private static final String DISTINCT_VALUES = "DISTINCT_VALUES";
+    @Autowired
+    private ElasticSearchConfiguration elasticSearchConfiguration;
 
-    /*
-    TODO: Add RestHighLevelClient Here
-     */
-    private RestHighLevelClient client = null;//getClient();
+    private RestHighLevelClient client;
+
+    @PostConstruct
+    public void init(){
+        client = elasticSearchConfiguration.getElasticRestClient();
+    }
 
     public List<String> getUniqueIdFromElasticSearch() {
-
-
         Assert.notNull(client, "RestHighLevelClient Cannot be Null");
-
-        SearchRequest searchRequest = new SearchRequest();
-        searchRequest.indices(INDEX_NAME);
-        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-        searchSourceBuilder.query(QueryBuilders.matchAllQuery());
-        searchSourceBuilder.aggregation(AggregationBuilders.terms(DISTINCT_VALUES).field("id.keyword"));
-        searchRequest.source(searchSourceBuilder);
-        Map<String, Object> map = null;
+        SearchRequest searchRequest = elasticSearchRequest.buildRequestToGetUniqueRecords();
 
         try {
             SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
-
-            if (searchResponse.getHits().getTotalHits().value > 0) {
-                SearchHit[] searchHits = searchResponse.getHits().getHits();
-                for (SearchHit searchHit : searchHits) {
-                    map = searchHit.getSourceAsMap();
-                }
-            }
-
+            log.info("ElasticSearchQueries:getUniqueIdFromElasticSearch :: Search Response-{}", searchResponse);
             Aggregations aggregations = searchResponse.getAggregations();
-            List<String> list = new ArrayList<>();
-            Terms aggTerms = aggregations.get(DISTINCT_VALUES);
+            List<String> uniqueIdsList = new ArrayList<>();
+            Terms aggTerms = aggregations.get(Constants.DISTINCT_VALUES);
             List<? extends Terms.Bucket> buckets = aggTerms.getBuckets();
             for (Terms.Bucket bucket : buckets) {
-                list.add(bucket.getKeyAsString());
+                uniqueIdsList.add(bucket.getKeyAsString());
             }
-            return list;
+            log.info("ElasticSearchQueries:getUniqueIdFromElasticSearch :: UniqueIds List-{}", uniqueIdsList);
+            return uniqueIdsList;
         } catch (Exception ex) {
             log.error("Exception Occurred while fetching the Unique Records from ElasticSearch", ex);
         }
         return null;
     }
 
-    public ResponseDocument getDocsFromES(SearchSourceBuilder queryRequest) {
+    public ResponseDocument getDocsFromES(String uniqueId) {
         SearchResponse searchResponse = null;
-        SearchRequest searchRequest = new SearchRequest(INDEX_NAME);
-        searchRequest.source(queryRequest);
+        SearchRequest searchRequest = elasticSearchRequest.buildRequestForGetDocs(uniqueId);
         try {
             searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
-            log.info("ElasticSearchQueries:getDocsFromES:: Completed");
-
+            log.info("ElasticSearchQueries:getDocsFromES :: Search Response-{}", searchResponse);
         } catch (Exception ex) {
             log.error("ElasticSearchQueries:getDocsFromES:: got the Exception while fetching results", ex);
         }
@@ -94,9 +84,9 @@ public class ElasticSearchQueries {
             documentDTO.setNumDocuments(0L);
         } else {
             SearchHit[] searchHits = response.getHits().getHits();
-            List<ElasticSearchDocument> documentList = new ArrayList<>();
+            List<ESEntityDTO> documentList = new ArrayList<>();
             for (SearchHit hit : searchHits) {
-                ElasticSearchDocument document = JsonUtil.getMapper().convertValue(hit.getSourceAsMap(), ElasticSearchDocument.class);
+                ESEntityDTO document = JsonUtil.getMapper().convertValue(hit.getSourceAsMap(), ESEntityDTO.class);
                 documentList.add(document);
             }
             documentDTO.setData(documentList);

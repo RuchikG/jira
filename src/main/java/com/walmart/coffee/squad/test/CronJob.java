@@ -2,15 +2,19 @@ package com.walmart.coffee.squad.test;
 
 import com.walmart.coffee.squad.test.ElasticSearch.ElasticSearchQueries;
 import com.walmart.coffee.squad.test.ElasticSearch.ElasticSearchRequest;
-import com.walmart.coffee.squad.test.model.ResponseDocument;
+import com.walmart.coffee.squad.test.dto.ResponseDocument;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.util.Assert;
 
 import java.util.List;
 
+@Configuration
+@EnableScheduling
 @Slf4j
 public class CronJob {
 
@@ -25,6 +29,7 @@ public class CronJob {
 
     @Scheduled(cron = "*/15 * * * * ?")
     public void run() {
+        log.info("Cron Job Started");
         List<String> uniqueIds = elasticSearchQueries.getUniqueIdFromElasticSearch();
         submitTask(uniqueIds);
     }
@@ -38,9 +43,8 @@ public class CronJob {
     }
 
     public void flow(String uniqueId) {
-        SearchSourceBuilder queryRequest = elasticSearchRequest.buildRequest(uniqueId);
-        ResponseDocument responseDocument = elasticSearchQueries.getDocsFromES(queryRequest);
-//        consolidateEvent();
-//        createDTOforJira();
+        ResponseDocument responseDocument = elasticSearchQueries.getDocsFromES(uniqueId);
+//        JiraDTO jiraDTO = consolidateEvent(responseDocument);
+//        sendDTOforJira(jiraDTO);
     }
 }
