@@ -6,6 +6,7 @@ import org.springframework.util.Assert;
 
 import java.util.concurrent.*;
 
+@Component
 @Slf4j
 public class AsyncExecutor {
 
@@ -21,27 +22,12 @@ public class AsyncExecutor {
 
     private static ExecutorService asyncExecutor;
 
-    private ThreadPoolExecutor asyncExecutorForCCExclusionZipCode;
-
     public ExecutorService getAsyncExecutor() {
         if (asyncExecutor == null) {
             asyncExecutor = Executors.newFixedThreadPool(NUM_OF_THREADS);
         }
         return asyncExecutor;
     }
-
-//    public ThreadPoolExecutor getAsyncExecutorForCCExclusionZipCode() {
-//        if (asyncExecutorForCCExclusionZipCode == null) {
-//            LinkedBlockingQueue<Runnable> linkedBlockingQueue = new LinkedBlockingQueue<>(QUEUE_SIZE);
-//            asyncExecutorForCCExclusionZipCode = new ThreadPoolExecutor(
-//                    CORE_POOL_SIZE, MAX_POOL_SIZE, KEEP_ALIVE_TIME_IN_HOUR, TimeUnit.HOURS, linkedBlockingQueue,
-//                    Executors.defaultThreadFactory(), new ThreadPoolExecutor.CallerRunsPolicy());
-//        }
-//        log.info("BaseExecutor: getAsyncExecutorForCCExclusionZipCode:: "
-//                + "Current Queue size: " + asyncExecutorForCCExclusionZipCode.getQueue().size()
-//                + " Max Queue Size: " + );
-//        return asyncExecutorForCCExclusionZipCode;
-//    }
 
     public void executeRunnableTask(Runnable task) {
         Assert.notNull(task, "task cannot be null");
