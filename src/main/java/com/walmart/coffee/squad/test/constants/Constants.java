@@ -14,6 +14,7 @@ public class Constants {
     //Elastic Search Constants
     public static final String DISTINCT_VALUES = "DISTINCT_VALUES";
     public static final String PULL_REQUEST_NUMBER= "pull_request.number";
+    public static final String PULL_REQUEST_UPDATED_AT = "pull_request.updated_at";
     public static final String INDEX_NAME = "github_18_6_2024";
 
 }

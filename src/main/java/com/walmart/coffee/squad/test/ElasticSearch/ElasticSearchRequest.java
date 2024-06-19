@@ -23,7 +23,7 @@ public class ElasticSearchRequest {
         searchRequest.indices(Constants.INDEX_NAME);
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         searchSourceBuilder.query(QueryBuilders.termsQuery(Constants.PULL_REQUEST_NUMBER, uniqueId));
-        searchSourceBuilder.sort(new FieldSortBuilder("pull_request.updated_at").order(SortOrder.DESC));
+        searchSourceBuilder.sort(new FieldSortBuilder(Constants.PULL_REQUEST_UPDATED_AT).order(SortOrder.DESC));
         searchRequest.source(searchSourceBuilder);
         return searchRequest;
     }
